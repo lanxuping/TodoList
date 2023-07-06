@@ -9,7 +9,7 @@ import UIKit
 import CoreData
 import RealmSwift
 
-class CategroyTableViewController: UITableViewController {
+class CategroyTableViewController: SwipeTableViewController {
     var categroyArr: Results<CateM>?
     let realm = try! Realm()
     
@@ -61,7 +61,7 @@ class CategroyTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.CategroyCell, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let cate = categroyArr?[indexPath.row]
         cell.textLabel?.text = cate?.name ?? "Please add categroy"
         return cell
@@ -79,4 +79,15 @@ class CategroyTableViewController: UITableViewController {
         }
     }
     
+    override func deleteData(with indexPath: IndexPath) {
+        if let cate = categroyArr?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(cate)
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
