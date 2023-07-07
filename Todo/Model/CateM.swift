@@ -10,5 +10,6 @@ import RealmSwift
 
 class CateM: Object {
     @objc dynamic var name: String = ""
+    @objc dynamic var color: String = "010101"
     let items = List<Item>()
 }

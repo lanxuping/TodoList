@@ -7,8 +7,10 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class TodoListViewController: SwipeTableViewController {
+    @IBOutlet weak var searchBar: UISearchBar!
     let realm = try! Realm()
     var itemArray: Results<Item>?
     var userDefault = UserDefaults.standard
@@ -20,7 +22,14 @@ class TodoListViewController: SwipeTableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        if let color = selectedCategroy?.color {
+            navigationController?.navigationBar.barTintColor = UIColor(hexString: color)
+            searchBar.barTintColor = UIColor(hexString: color)
+        }
     }
 
     @IBAction func click(_ sender: UIBarButtonItem) {
@@ -58,6 +67,10 @@ class TodoListViewController: SwipeTableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = itemArray?[indexPath.row] {
+            if let color = UIColor(hexString: selectedCategroy!.color)?.darken(byPercentage: CGFloat(indexPath.row) / CGFloat(itemArray!.count)) {
+                cell.backgroundColor = color
+                cell.textLabel?.textColor = ContrastColorOf(color, returnFlat: true)
+            }
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
         } else {
@@ -68,7 +81,7 @@ class TodoListViewController: SwipeTableViewController {
     override func deleteData(with indexPath: IndexPath) {
         if let item = itemArray?[indexPath.row] {
             do {
-                try realm.write {
+                try  realm.write {
                     realm.delete(item)
                 }
             } catch {

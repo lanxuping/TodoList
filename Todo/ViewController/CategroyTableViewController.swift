@@ -8,6 +8,7 @@
 import UIKit
 import CoreData
 import RealmSwift
+import ChameleonFramework
 
 class CategroyTableViewController: SwipeTableViewController {
     var categroyArr: Results<CateM>?
@@ -29,6 +30,7 @@ class CategroyTableViewController: SwipeTableViewController {
         let alertAction = UIAlertAction(title: "确认", style: .default) { action in
             let cate = CateM()
             cate.name = textF.text!
+            cate.color = UIColor.randomFlat().hexValue()
             //在realm中无需添加数据了，数组会自动更新并监视这些数据更改 delete categroyArr.append(cate)
             self.addCategroy(cate: cate)
         }
@@ -64,6 +66,7 @@ class CategroyTableViewController: SwipeTableViewController {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         let cate = categroyArr?[indexPath.row]
         cell.textLabel?.text = cate?.name ?? "Please add categroy"
+        cell.backgroundColor = UIColor(hexString: cate?.color ?? "1D9BF6")
         return cell
     }
     
