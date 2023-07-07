@@ -24,7 +24,7 @@ class CategroyTableViewController: SwipeTableViewController {
         let alertController = UIAlertController(title: "add", message: nil, preferredStyle: .alert)
         alertController.addTextField { textfield in
             textfield.translatesAutoresizingMaskIntoConstraints = false
-            textfield.placeholder = "输入分类"
+            textfield.placeholder = "请输入分类"
             textF = textfield
         }
         let alertAction = UIAlertAction(title: "确认", style: .default) { action in
